@@ -1,6 +1,8 @@
 public class SkillTree {
 
+    //name of the skill tree
     String name;
+    //number of elements in nodes
     int length;
     Node[] nodes;
 
@@ -12,6 +14,8 @@ public class SkillTree {
 
     }
 
+    //adds a node to the skill tree if there is space available
+    //returns true if adding a node was successful, false otherwise
     public boolean addNode(Node node){
 
         for(int i = 0; i < length; i++){

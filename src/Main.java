@@ -18,6 +18,7 @@ public class Main {
                          "Enter 2 for Earthbender\n" +
                          "Enter 3 for Firebender\n" +
                          "Element: ");
+        //error checks user input
         while(!scanner.hasNextInt() || (scanner.nextInt() < 0 || scanner.nextInt() > 3)){
             if(!scanner.hasNextInt()){
                 System.out.print("\nThat's not an integer. Try again: ");
@@ -32,6 +33,7 @@ public class Main {
 
         System.out.print("\nGreat! Now enter the level of your character! It must be between 1 and 20, inclusive.\n" +
                          "Level: ");
+        //error checks user input
         while(!scanner.hasNextInt() || (scanner.nextInt() < 1 || scanner.nextInt() > 20)){
             if(!scanner.hasNextInt()){
                 System.out.print("\nThat's not an integer. Try again: ");
@@ -49,6 +51,7 @@ public class Main {
                          "Enter 1 for female.\n" +
                          "Enter 2 for both/neither.\n" +
                          "Gender: ");
+        //error checks user input
         while(!scanner.hasNextInt() || (scanner.nextInt() < 0 || scanner.nextInt() > 2)){
             if(!scanner.hasNextInt()){
                 System.out.print("\nThat's not an integer. Try again: ");
@@ -61,6 +64,7 @@ public class Main {
         }
         gender = scanner.nextInt();
 
+        //creates a random character based on user input and calls genRandomStats
         if(element == 0){
             AirCharacter air = new AirCharacter(level);
             air.genRandomStats();

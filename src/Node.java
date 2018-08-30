@@ -1,11 +1,16 @@
 public class Node {
 
+    //name of the node
     String name;
+    //number of upgrade spots available
     int length;
+    //each array element indicates whether or not the skill has been upgraded to that level
     boolean[] used;
+    //the first parent of the node, null if the node has no parents
     Node parent1;
+    //the second parent of the node, null if the node only has 1 parent, or if the node has no parents
     Node parent2;
-    //boolean isEndNode;
+    //true if this node has 2 parents, false otherwise
     boolean has2Parents;
 
     public Node(String n, int l, Node p1, Node p2, boolean h){
@@ -23,6 +28,8 @@ public class Node {
 
     }
 
+    //finds the first element of used which is false and makes it true
+    //if all elements are true, does nothing
     public void addSkillPoint(){
 
         for(int i = 0; i < length; i++){
@@ -34,6 +41,7 @@ public class Node {
 
     }
 
+    //returns true if all elements of used are true, false otherwise
     public boolean isFull(){
         int count = 0;
         for(int i = 0; i < length; i++){
@@ -50,6 +58,9 @@ public class Node {
         }
     }
 
+    //returns true if one or both of the parents of this node has at least one element of used which is true
+    //also returns true if the node has no parents
+    //false otherwise
     public boolean parentIsUsed(){
         if(parent1 == null || parent1.used[0] == true || (has2Parents && (parent1.used[0] == true || parent2.used[0] == true))){
             return true;

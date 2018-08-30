@@ -1,75 +1,38 @@
 public class Character {
 
     String name;
-    int gender;
+    int gender; //only used for generating name, all airbender names are unisex, so airbenders don't need this field
     int level;
-    int maxBP;
+    int maxBP; //maximum bending points for use in combat
     int strength;
-    int smod;
-    int dex;
-    int dmod;
+    int smod; //strength modifier
+    int dex; //dexterity
+    int dmod; //dexterity modifier
     int constitution;
-    int comod;
+    int comod; //constitution modifier
     int intelligence;
-    int imod;
+    int imod; //intelligence modifier
     int wisdom;
-    int wmod;
+    int wmod; //wisdom modifier
     int charisma;
-    int chmod;
+    int chmod; //charisma modifier
     int maxHitPoints;
     int hitDice;
-    int profBonus;
+    int profBonus; //proficiency bonus depends on level
     int speed;
-    int style;
-    int skillPoints;
-    SkillTree tree1;
-    SkillTree tree2;
+    int style; //bending style, either 0 or 1 because each element has 2 possible bending styles
+    int skillPoints; //number of upgrades possible when filling the skill tree, depends on level
+    SkillTree tree1; //bending style 0
+    SkillTree tree2; //bending style 1
 
     public Character(){
         name = "name";
         gender = 0;
         level = 1;
-        if(level == 1){
-            maxBP = 8;
-        }
-        else if(level > 1 && level < 5){
-            maxBP = 9;
-        }
-        else if(level > 4 && level < 8){
-            maxBP = 10;
-        }
-        else if(level > 7 && level < 11){
-            maxBP = 11;
-        }
-        else if(level > 10 && level < 14){
-            maxBP = 12;
-        }
-        else if(level > 13 && level < 17){
-            maxBP = 13;
-        }
-        else if(level > 16 && level < 20){
-            maxBP = 14;
-        }
-        else{
-            maxBP = 15;
-        }
 
-        if(level < 5){
-            profBonus = 2;
-        }
-        else if(level > 4 && level < 9){
-            profBonus = 3;
-        }
-        else if(level > 8 && level < 13){
-            profBonus = 4;
-        }
-        else if(level > 12 && level < 17){
-            profBonus = 5;
-        }
-        else{
-            profBonus = 6;
-        }
-
+        //sets everything to the minimum as detailed in the rules
+        maxBP = 9;
+        profBonus = 2;
         strength = 0;
         dex = 0;
         constitution = 0;
@@ -78,52 +41,7 @@ public class Character {
         charisma = 0;
         maxHitPoints = 0;
         hitDice = 0;
-
-        if(level == 1){
-            skillPoints = 2;
-        }
-        else if(level == 2){
-           skillPoints = 3;
-        }
-        else if(level == 3 || level == 4){
-            skillPoints = 5;
-        }
-        else if(level == 5){
-            skillPoints = 6;
-        }
-        else if(level == 6){
-            skillPoints = 8;
-        }
-        else if(level == 7 || level == 8){
-            skillPoints = 10;
-        }
-        else if(level == 9){
-            skillPoints = 12;
-        }
-        else if(level == 10){
-            skillPoints = 14;
-        }
-        else if(level == 11 || level == 12){
-            skillPoints = 15;
-        }
-        else if(level == 13){
-            skillPoints = 17;
-        }
-        else if(level == 14){
-            skillPoints = 18;
-        }
-        else if(level == 15 || level == 16){
-            skillPoints = 20;
-        }
-        else if(level == 17){
-            skillPoints = 21;
-        }
-        else if(level == 18 || level == 19){
-            skillPoints = 23;
-        }
-        else{
-            skillPoints = 24;
-        }
+        skillPoints = 2;
     }
 
     public Character(int g, int l){
@@ -131,6 +49,8 @@ public class Character {
         name = "name";
         gender = g;
         level = l;
+
+        //sets max bending points depending on the level of the character
         if(level == 1){
             maxBP = 8;
         }
@@ -156,6 +76,7 @@ public class Character {
             maxBP = 15;
         }
 
+        //sets proficiency bonus depending on the level of the character
         if(level < 5){
             profBonus = 2;
         }
@@ -172,6 +93,7 @@ public class Character {
             profBonus = 6;
         }
 
+        //sets all stats to zero so that random generation can occur in genRandomStats
         strength = 0;
         dex = 0;
         constitution = 0;
@@ -181,6 +103,7 @@ public class Character {
         maxHitPoints = 0;
         hitDice = 0;
 
+        //sets skill points depending on character's level as detailed in the rules
         if(level == 1){
             skillPoints = 2;
         }
@@ -229,19 +152,23 @@ public class Character {
 
     }
 
+    //generates stats randomly as Dnd rules state. Simulates rolling dice at marked locations
     public void genRandomStats(){
 
         int[] stats = new int[6];
         int[] modifiers = new int[6];
         int[] rolls = new int[4];
 
+        //for each of the 6 stats: strength, dexterity, constitution, intelligence, wisdom, charisma
         for(int i = 0; i < 6; i++){
 
+            //simulates rolling 4 d6 dice
             rolls[0] = (int)(Math.random() * ((6-1)+1)) + 1;
             rolls[1] = (int)(Math.random() * ((6-1)+1)) + 1;
             rolls[2] = (int)(Math.random() * ((6-1)+1)) + 1;
             rolls[3] = (int)(Math.random() * ((6-1)+1)) + 1;
 
+            //determines the lowest number rolled and saves the index of that roll to smallestIndex
             int smallest = rolls[0];
             int smallestIndex = 0;
             for( int j = 0; j < 4; j++){
@@ -253,6 +180,7 @@ public class Character {
 
             }
 
+            //adds 3 largest rolls together
             int sum = 0;
             for(int j = 0; j < 4; j++){
                 if(j != smallestIndex){
@@ -260,84 +188,88 @@ public class Character {
                 }
             }
 
+            //assigns the sum of the largest 3 rolls to one of the six stats
             stats[i] = sum;
 
         }
 
+        //as a player levels up, occasionally they receive the opportunity to do one of the following:
+        //increase one stat by 2
+        //increase two stats by 1
         if(level > 3 && level < 8){
-            int one = (int)(Math.random() * ((5-0)+1)) + 0;
-            int two = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[one]++;
-            stats[two]++;
+            stats[statOne]++;
+            stats[statTwo]++;
         }
         else if(level > 7 && level < 12){
-            int one = (int)(Math.random() * ((5-0)+1)) + 0;
-            int two = (int)(Math.random() * ((5-0)+1)) + 0;
-            int three = (int)(Math.random() * ((5-0)+1)) + 0;
-            int four = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFour = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[one]++;
-            stats[two]++;
-            stats[three]++;
-            stats[four]++;
+            stats[statOne]++;
+            stats[statTwo]++;
+            stats[statThree]++;
+            stats[statFour]++;
         }
         else if(level > 11 && level < 16){
-            int one = (int)(Math.random() * ((5-0)+1)) + 0;
-            int two = (int)(Math.random() * ((5-0)+1)) + 0;
-            int three = (int)(Math.random() * ((5-0)+1)) + 0;
-            int four = (int)(Math.random() * ((5-0)+1)) + 0;
-            int five = (int)(Math.random() * ((5-0)+1)) + 0;
-            int six = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFour = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFive = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statSix = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[one]++;
-            stats[two]++;
-            stats[three]++;
-            stats[four]++;
-            stats[five]++;
-            stats[six]++;
+            stats[statOne]++;
+            stats[statTwo]++;
+            stats[statThree]++;
+            stats[statFour]++;
+            stats[statFive]++;
+            stats[statSix]++;
         }
         else if(level > 15 && level < 19){
-            int one = (int)(Math.random() * ((5-0)+1)) + 0;
-            int two = (int)(Math.random() * ((5-0)+1)) + 0;
-            int three = (int)(Math.random() * ((5-0)+1)) + 0;
-            int four = (int)(Math.random() * ((5-0)+1)) + 0;
-            int five = (int)(Math.random() * ((5-0)+1)) + 0;
-            int six = (int)(Math.random() * ((5-0)+1)) + 0;
-            int seven = (int)(Math.random() * ((5-0)+1)) + 0;
-            int eight = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFour = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFive = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statSix = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statSeven = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statEight = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[one]++;
-            stats[two]++;
-            stats[three]++;
-            stats[four]++;
-            stats[five]++;
-            stats[six]++;
-            stats[seven]++;
-            stats[eight]++;
+            stats[statOne]++;
+            stats[statTwo]++;
+            stats[statThree]++;
+            stats[statFour]++;
+            stats[statFive]++;
+            stats[statSix]++;
+            stats[statSeven]++;
+            stats[statEight]++;
         }
         else if(level > 18){
-            int one = (int)(Math.random() * ((5-0)+1)) + 0;
-            int two = (int)(Math.random() * ((5-0)+1)) + 0;
-            int three = (int)(Math.random() * ((5-0)+1)) + 0;
-            int four = (int)(Math.random() * ((5-0)+1)) + 0;
-            int five = (int)(Math.random() * ((5-0)+1)) + 0;
-            int six = (int)(Math.random() * ((5-0)+1)) + 0;
-            int seven = (int)(Math.random() * ((5-0)+1)) + 0;
-            int eight = (int)(Math.random() * ((5-0)+1)) + 0;
-            int nine = (int)(Math.random() * ((5-0)+1)) + 0;
-            int ten = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFour = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFive = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statSix = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statSeven = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statEight = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statNine = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTen = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[one]++;
-            stats[two]++;
-            stats[three]++;
-            stats[four]++;
-            stats[five]++;
-            stats[six]++;
-            stats[seven]++;
-            stats[eight]++;
-            stats[nine]++;
-            stats[ten]++;
+            stats[statOne]++;
+            stats[statTwo]++;
+            stats[statThree]++;
+            stats[statFour]++;
+            stats[statFive]++;
+            stats[statSix]++;
+            stats[statSeven]++;
+            stats[statEight]++;
+            stats[statNine]++;
+            stats[statTen]++;
         }
 
         strength = stats[0];
@@ -347,6 +279,8 @@ public class Character {
         wisdom = stats[4];
         charisma = stats[5];
 
+        //sets modifiers to values indicated by the rules, based on the value of the corresponding stat
+        //during gameplay modifiers are applied to rolls as indicated by the rules or at the DM's discretion
         for(int i = 0; i < 6; i++){
             if(stats[i] == 1){
                 modifiers[i] = -5;
@@ -390,9 +324,11 @@ public class Character {
         wmod = modifiers[4];
         chmod = modifiers[5];
 
+        //sets hit points to the minimum as indicated by the rules
         if(level == 1){
             maxHitPoints = 8;
         }
+        //each time a player levels up, they roll a d8, add their constitution modifier to the roll, and then add that number to their max hit points
         else{
             maxHitPoints = 8;
             for(int i = 2; i < 21; i++){
@@ -405,7 +341,7 @@ public class Character {
             }
         }
 
-        //testing purposes
+        //prints information for the user
         System.out.println("Ability Scores and Modifiers");
         System.out.println("Strength: " + strength);
         System.out.println("Strength modifier: " + smod);

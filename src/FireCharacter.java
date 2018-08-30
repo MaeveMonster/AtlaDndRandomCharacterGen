@@ -9,6 +9,8 @@ public class FireCharacter extends Character{
         name = "name";
         gender = g;
         level = l;
+
+        //sets max bending points depending on the level of the character
         if(level == 1){
             maxBP = 8;
         }
@@ -34,6 +36,7 @@ public class FireCharacter extends Character{
             maxBP = 15;
         }
 
+        //sets proficiency bonus depending on the level of the character
         if(level < 5){
             profBonus = 2;
         }
@@ -50,6 +53,7 @@ public class FireCharacter extends Character{
             profBonus = 6;
         }
 
+        //sets all stats to zero so that random generation can occur in genRandomStats
         strength = 0;
         dex = 0;
         constitution = 0;
@@ -58,8 +62,10 @@ public class FireCharacter extends Character{
         charisma = 0;
         maxHitPoints = 0;
         hitDice = 0;
+        //firebenders have a movement speed of 30ft per turn
         speed = 30;
 
+        //firebending culture is based on Japanese culture, so these are Japanese names
         String[] femaleNames = {"Andrea", "Kaiya", "Mao", "Naoko", "Nariko", "Natsuko", "Nishi",
                 "Noriko", "Nozomi", "Rei", "Sachi", "Tamiko", "Umeko", "Yoko",
                 "Yoshiko", "Yuri", "Aika", "Aimi", "Akane", "Fumiko", "Haruka", "Mari",
@@ -75,6 +81,7 @@ public class FireCharacter extends Character{
                 "Raiden", "Reiji", "Saburo", "Takahiro", "Tatsuya", "Tetsu", "Toshiro", "Tsubasa", "Yosuke",
                 "Yasahiro"};
 
+        //picks a random name based on gender
         if(gender == 0){
             name = maleNames[(int)(Math.random()*((25 - 0) +1))+0];
         }
@@ -87,8 +94,10 @@ public class FireCharacter extends Character{
 
         name += " of the Fire Nation";
 
+        //generates a random bending style, either 0 or 1
         style = (int)(Math.random()*((1-0)+1))+0;
 
+        //sets skill points depending on level of the character
         if(level == 1){
             skillPoints = 2;
         }
@@ -135,9 +144,12 @@ public class FireCharacter extends Character{
             skillPoints = 24;
         }
 
+        //firebending styes are Aggressive Firebending and Controlled Firebending
+        //creates skill trees to hold bending skills
         tree1 = new SkillTree("Aggressive", 6);
         tree2 = new SkillTree("Controlled", 7);
 
+        //adds nodes to the skill trees in a precise order so that parant-child relationships are correct
         tree1.addNode(new Node("Flame Punch", 3, null, null, false));
         tree1.addNode(new Node("Fireball", 3, tree1.nodes[0], null, false));
         tree1.addNode(new Node("Flaming Kick", 3, tree1.nodes[0], null, false));
@@ -155,11 +167,16 @@ public class FireCharacter extends Character{
 
     }
 
+    //generates random stats for the character and prints them for the user
     public void genRandomStats(){
 
+        //indicates how many skill points have been used to learn skills in the skill trees
         int spUsed = 0;
+        //while skill points used is less than the number of skill points a character has to spend
         while(spUsed < skillPoints){
+            //if no skill points have yet been used, pick one of the nodes at the top of the tree
             if(spUsed == 0){
+                //first skill learned must be from the tree that corresponds to the character's bending style
                 if(style == 0){
                     tree1.nodes[0].addSkillPoint();
                     spUsed++;
@@ -168,29 +185,48 @@ public class FireCharacter extends Character{
                     tree2.nodes[(int)(Math.random()*((1-0)+1))+0].addSkillPoint();
                     spUsed++;
                 }
-            }else{
+            }
+            //if this is not the first skill point spent
+            else{
+                //pick a random tree
                 int tree = (int)(Math.random()*((1-0)+1))+0;
+                //if the first tree is chosen
                 if(tree == 0){
+                    //generate a random node on the tree
                     int randNode = (int)(Math.random()*((5-0)+1))+0;
+                    //represents how many skill points have been used before entering this loop
                     int spUsedBeforeLoop = spUsed;
+                    //do until a skill point is spent
                     do{
+                        //if the chosen node is not full (some skills can be leveled up by using more skill points on them)
+                        //and if that skill's parent has been learned
+                        //add a skill point to that node and add one to spUsed
                         if(tree1.nodes[randNode].parentIsUsed() && !tree1.nodes[randNode].isFull()){
                             tree1.nodes[randNode].addSkillPoint();
                             spUsed++;
                         }
                         else{
+                            //else generate a new random node
                             randNode = (int)(Math.random()*((5-0)+1))+0;
                         }
                     }while(spUsedBeforeLoop == spUsed);
                 }
+                //if the second tree is chosen
                 else{
+                    //generate a random node on the tree
                     int randNode = (int)(Math.random()*((6-0)+1))+0;
+                    //represents how many skill points have been used before entering this loop
                     int spUsedBeforeLoop = spUsed;
+                    //do until a skill point is spent
                     do{
+                        //if the chosen node is not full (some skills can be leveled up by using more skill points on them)
+                        //and if that skill's parent has been learned
+                        //add a skill point to that node and add one to spUsed
                         if(tree2.nodes[randNode].parentIsUsed() && !tree2.nodes[randNode].isFull()){
                             tree2.nodes[randNode].addSkillPoint();
                             spUsed++;
                         }
+                        //else generate a new random node
                         else{
                             randNode = (int)(Math.random()*((6-0)+1))+0;
                         }
@@ -204,13 +240,16 @@ public class FireCharacter extends Character{
         int[] modifiers = new int[6];
         int[] rolls = new int[4];
 
+        //for each of the 6 stats
         for(int i = 0; i < 6; i++){
 
+            //roll a d6 4 times
             rolls[0] = (int)(Math.random() * ((6-1)+1)) + 1;
             rolls[1] = (int)(Math.random() * ((6-1)+1)) + 1;
             rolls[2] = (int)(Math.random() * ((6-1)+1)) + 1;
             rolls[3] = (int)(Math.random() * ((6-1)+1)) + 1;
 
+            //determine the smallest roll and set its index to smallestIndex
             int smallest = rolls[0];
             int smallestIndex = 0;
             for( int j = 0; j < 4; j++){
@@ -222,6 +261,7 @@ public class FireCharacter extends Character{
 
             }
 
+            //add the three largest rolls together
             int sum = 0;
             for(int j = 0; j < 4; j++){
                 if(j != smallestIndex){
@@ -229,86 +269,91 @@ public class FireCharacter extends Character{
                 }
             }
 
+            //set the stat to the sum of the three largest rolls
             stats[i] = sum;
 
         }
 
+        //as a player levels up, occasionally they receive the opportunity to do one of the following:
+        //increase one stat by 2
+        //increase two stats by 1
         if(level > 3 && level < 8){
-            int one = (int)(Math.random() * ((5-0)+1)) + 0;
-            int two = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[one]++;
-            stats[two]++;
+            stats[statOne]++;
+            stats[statTwo]++;
         }
         else if(level > 7 && level < 12){
-            int one = (int)(Math.random() * ((5-0)+1)) + 0;
-            int two = (int)(Math.random() * ((5-0)+1)) + 0;
-            int three = (int)(Math.random() * ((5-0)+1)) + 0;
-            int four = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFour = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[one]++;
-            stats[two]++;
-            stats[three]++;
-            stats[four]++;
+            stats[statOne]++;
+            stats[statTwo]++;
+            stats[statThree]++;
+            stats[statFour]++;
         }
         else if(level > 11 && level < 16){
-            int one = (int)(Math.random() * ((5-0)+1)) + 0;
-            int two = (int)(Math.random() * ((5-0)+1)) + 0;
-            int three = (int)(Math.random() * ((5-0)+1)) + 0;
-            int four = (int)(Math.random() * ((5-0)+1)) + 0;
-            int five = (int)(Math.random() * ((5-0)+1)) + 0;
-            int six = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFour = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFive = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statSix = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[one]++;
-            stats[two]++;
-            stats[three]++;
-            stats[four]++;
-            stats[five]++;
-            stats[six]++;
+            stats[statOne]++;
+            stats[statTwo]++;
+            stats[statThree]++;
+            stats[statFour]++;
+            stats[statFive]++;
+            stats[statSix]++;
         }
         else if(level > 15 && level < 19){
-            int one = (int)(Math.random() * ((5-0)+1)) + 0;
-            int two = (int)(Math.random() * ((5-0)+1)) + 0;
-            int three = (int)(Math.random() * ((5-0)+1)) + 0;
-            int four = (int)(Math.random() * ((5-0)+1)) + 0;
-            int five = (int)(Math.random() * ((5-0)+1)) + 0;
-            int six = (int)(Math.random() * ((5-0)+1)) + 0;
-            int seven = (int)(Math.random() * ((5-0)+1)) + 0;
-            int eight = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFour = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFive = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statSix = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statSeven = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statEight = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[one]++;
-            stats[two]++;
-            stats[three]++;
-            stats[four]++;
-            stats[five]++;
-            stats[six]++;
-            stats[seven]++;
-            stats[eight]++;
+            stats[statOne]++;
+            stats[statTwo]++;
+            stats[statThree]++;
+            stats[statFour]++;
+            stats[statFive]++;
+            stats[statSix]++;
+            stats[statSeven]++;
+            stats[statEight]++;
         }
         else if(level > 18){
-            int one = (int)(Math.random() * ((5-0)+1)) + 0;
-            int two = (int)(Math.random() * ((5-0)+1)) + 0;
-            int three = (int)(Math.random() * ((5-0)+1)) + 0;
-            int four = (int)(Math.random() * ((5-0)+1)) + 0;
-            int five = (int)(Math.random() * ((5-0)+1)) + 0;
-            int six = (int)(Math.random() * ((5-0)+1)) + 0;
-            int seven = (int)(Math.random() * ((5-0)+1)) + 0;
-            int eight = (int)(Math.random() * ((5-0)+1)) + 0;
-            int nine = (int)(Math.random() * ((5-0)+1)) + 0;
-            int ten = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFour = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statFive = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statSix = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statSeven = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statEight = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statNine = (int)(Math.random() * ((5-0)+1)) + 0;
+            int statTen = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[one]++;
-            stats[two]++;
-            stats[three]++;
-            stats[four]++;
-            stats[five]++;
-            stats[six]++;
-            stats[seven]++;
-            stats[eight]++;
-            stats[nine]++;
-            stats[ten]++;
+            stats[statOne]++;
+            stats[statTwo]++;
+            stats[statThree]++;
+            stats[statFour]++;
+            stats[statFive]++;
+            stats[statSix]++;
+            stats[statSeven]++;
+            stats[statEight]++;
+            stats[statNine]++;
+            stats[statTen]++;
         }
 
+        //firebenders have +1 strength, +1 dexterity, and +1 intelligence
         stats[0]++;
         stats[1]++;
         stats[3]++;
@@ -320,6 +365,8 @@ public class FireCharacter extends Character{
         wisdom = stats[4];
         charisma = stats[5];
 
+        //sets modifiers to values indicated by the rules, based on the value of the corresponding stat
+        //during gameplay modifiers are applied to rolls as indicated by the rules or at the DM's discretion
         for(int i = 0; i < 6; i++){
             if(stats[i] == 1){
                 modifiers[i] = -5;
@@ -363,9 +410,11 @@ public class FireCharacter extends Character{
         wmod = modifiers[4];
         chmod = modifiers[5];
 
+        //sets hit points to the minimum as indicated by the rules
         if(level == 1){
             maxHitPoints = 8;
         }
+        //each time a player levels up, they roll a d8, add their constitution modifier to the roll, and then add that number to their max hit points
         else{
             maxHitPoints = 8;
             for(int i = 2; i < 21; i++){
@@ -378,10 +427,10 @@ public class FireCharacter extends Character{
             }
         }
 
+        //prints stats for the user
         System.out.println("Name: " + name);
         System.out.println("Level: " + level + "\n");
 
-        //testing purposes
         System.out.println("Ability Scores and Modifiers");
         System.out.println("Strength: " + strength);
         System.out.println("Strength modifier: " + smod);
@@ -396,6 +445,7 @@ public class FireCharacter extends Character{
         System.out.println("Charisma: " + charisma);
         System.out.println("Charisma modifier: " + chmod + "\n");
 
+        //bending bonus depends on which style of bending is chosen
         if(style == 0){
             System.out.println("Bending Bonus: " + smod + "\n");
         }else{
@@ -405,13 +455,16 @@ public class FireCharacter extends Character{
         System.out.println("Proficiency Bonus: " + profBonus + "\n");
 
         System.out.println("Saving Throws");
+        //firebenders are proficient in strength saving throwa
         System.out.println("Strength saving throw: " + (smod + profBonus));
+        //firebenders are proficient in dexterity saving throws
         System.out.println("Dexterity saving throw: " + (dmod + profBonus));
         System.out.println("Constitution saving throw: " + comod);
         System.out.println("Intelligence saving throw: " + imod);
         System.out.println("Wisdom saving throw: " + wmod);
         System.out.println("Charisma saving throw: " + chmod + "\n");
 
+        //chooses 2 skills out of the possible 6 in which a firebender may be proficient as indicated by the rules
         int prof1 = (int)(Math.random()*((4-0)+1))+0;
         int prof2;
         do{
@@ -504,6 +557,7 @@ public class FireCharacter extends Character{
         profSkills += "(both already included in above calculations)\n";
         System.out.println(profSkills);
 
+        //prints the skills learned from both skill trees and at what level each skill is
         System.out.println("Firebending Skills known: (See rule sheet for description of each skill)\n");
         System.out.println("Aggressive Firebending:");
         for(int i = 0; i < tree1.length; i++){
