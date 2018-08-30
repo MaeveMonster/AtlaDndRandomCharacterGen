@@ -8,7 +8,7 @@ The user frequently has to enter their input several times before anything happe
 The once the user has entered all of their input, the program occasionally times out while creating the character and needs to be restarted.
 
 
-Something I learned: I gained some experience in java. Even though I used java in highschool, I've only used it for one project in college, which was for a class so I didn't really get to ba all that creative. I wanted to do a personal project in java so that I had a little more freedom in it.
+Something I learned: I gained some experience in java. Even though I used java in highschool, I've only used it for one project in college, which was for a class so I didn't really get to be all that creative. I wanted to do a personal project in java so that I had a little more freedom in it. I also leanred a bit about storing data in trees. I used trees to store all the bending skills that its possible for a character to use.
 
 
 House benefit: CSHers can use my generator to learn how to play this awesome version of Dnd! (I plan to put this on a website eventually)
