@@ -15,3 +15,6 @@ House benefit: CSHers can use my generator to learn how to play this awesome ver
 
 
 Time spent: about 20 hours
+
+
+This project uses Java 1.8.0_161. You can download it here: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html. Then run Main.java.
