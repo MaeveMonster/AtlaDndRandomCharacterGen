@@ -5,63 +5,10 @@ public class AirCharacter extends Character{
     }
 
     //airbender generation does not require a gender because all airbender names are genderneutral
-    public AirCharacter(int l){
+    public AirCharacter(int g, int l){
 
-        name = "name";
-        level = l;
+        super(g, l);
 
-        //sets max bending points depending on the level of the character
-        if(level == 1){
-            maxBP = 8;
-        }
-        else if(level > 1 && level < 5){
-            maxBP = 9;
-        }
-        else if(level > 4 && level < 8){
-            maxBP = 10;
-        }
-        else if(level > 7 && level < 11){
-            maxBP = 11;
-        }
-        else if(level > 10 && level < 14){
-            maxBP = 12;
-        }
-        else if(level > 13 && level < 17){
-            maxBP = 13;
-        }
-        else if(level > 16 && level < 20){
-            maxBP = 14;
-        }
-        else{
-            maxBP = 15;
-        }
-
-        //sets proficiency bonus depending on the level of the character
-        if(level < 5){
-            profBonus = 2;
-        }
-        else if(level > 4 && level < 9){
-            profBonus = 3;
-        }
-        else if(level > 8 && level < 13){
-            profBonus = 4;
-        }
-        else if(level > 12 && level < 17){
-            profBonus = 5;
-        }
-        else{
-            profBonus = 6;
-        }
-
-        //sets all stats to 0 so that random generation can occur in genRandomStats
-        strength = 0;
-        dex = 0;
-        constitution = 0;
-        intelligence = 0;
-        wisdom = 0;
-        charisma = 0;
-        maxHitPoints = 0;
-        hitDice = 0;
         //airbenders have a speed of 30ft per turn
         speed = 30;
 
@@ -76,56 +23,6 @@ public class AirCharacter extends Character{
         name = names[(int)(Math.random()*((23 - 0) +1))+0];
 
         name += " of the Air Nomads";
-
-        //generates a random bending style, either 0 or 1
-        style = (int)(Math.random()*((1-0)+1))+0;
-
-        //sets the amount of skill points a character has based on their level
-        if(level == 1){
-            skillPoints = 2;
-        }
-        else if(level == 2){
-            skillPoints = 3;
-        }
-        else if(level == 3 || level == 4){
-            skillPoints = 5;
-        }
-        else if(level == 5){
-            skillPoints = 6;
-        }
-        else if(level == 6){
-            skillPoints = 8;
-        }
-        else if(level == 7 || level == 8){
-            skillPoints = 10;
-        }
-        else if(level == 9){
-            skillPoints = 12;
-        }
-        else if(level == 10){
-            skillPoints = 14;
-        }
-        else if(level == 11 || level == 12){
-            skillPoints = 15;
-        }
-        else if(level == 13){
-            skillPoints = 17;
-        }
-        else if(level == 14){
-            skillPoints = 18;
-        }
-        else if(level == 15 || level == 16){
-            skillPoints = 20;
-        }
-        else if(level == 17){
-            skillPoints = 21;
-        }
-        else if(level == 18 || level == 19){
-            skillPoints = 23;
-        }
-        else{
-            skillPoints = 24;
-        }
 
         //airbending styles are Defensive Airbending and Offensive Airbending
         tree1 = new SkillTree("Defensive", 7);
@@ -219,11 +116,11 @@ public class AirCharacter extends Character{
 
         }
 
-        int[] stats = new int[6];
+        int[] abilityScores = new int[6];
         int[] modifiers = new int[6];
         int[] rolls = new int[4];
 
-        //for each of the six stats
+        //for each of the six ability scores
         for(int i = 0; i < 6; i++){
 
             //roll a d6 four times
@@ -253,19 +150,19 @@ public class AirCharacter extends Character{
             }
 
             //assigns the sum of the largest three rolls to the stat at i
-            stats[i] = sum;
+            abilityScores[i] = sum;
 
         }
 
         //as a player levels up, occasionally they receive the opportunity to do one of the following:
-        //increase one stat by 2
-        //increase two stats by 1
+        //increase one ability score by 2
+        //increase two ability scores by 1
         if(level > 3 && level < 8){
             int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
             int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[statOne]++;
-            stats[statTwo]++;
+            abilityScores[statOne]++;
+            abilityScores[statTwo]++;
         }
         else if(level > 7 && level < 12){
             int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
@@ -273,10 +170,10 @@ public class AirCharacter extends Character{
             int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
             int statFour = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[statOne]++;
-            stats[statTwo]++;
-            stats[statThree]++;
-            stats[statFour]++;
+            abilityScores[statOne]++;
+            abilityScores[statTwo]++;
+            abilityScores[statThree]++;
+            abilityScores[statFour]++;
         }
         else if(level > 11 && level < 16){
             int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
@@ -286,12 +183,12 @@ public class AirCharacter extends Character{
             int statFive = (int)(Math.random() * ((5-0)+1)) + 0;
             int statSix = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[statOne]++;
-            stats[statTwo]++;
-            stats[statThree]++;
-            stats[statFour]++;
-            stats[statFive]++;
-            stats[statSix]++;
+            abilityScores[statOne]++;
+            abilityScores[statTwo]++;
+            abilityScores[statThree]++;
+            abilityScores[statFour]++;
+            abilityScores[statFive]++;
+            abilityScores[statSix]++;
         }
         else if(level > 15 && level < 19){
             int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
@@ -303,14 +200,14 @@ public class AirCharacter extends Character{
             int statSeven = (int)(Math.random() * ((5-0)+1)) + 0;
             int statEight = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[statOne]++;
-            stats[statTwo]++;
-            stats[statThree]++;
-            stats[statFour]++;
-            stats[statFive]++;
-            stats[statSix]++;
-            stats[statSeven]++;
-            stats[statEight]++;
+            abilityScores[statOne]++;
+            abilityScores[statTwo]++;
+            abilityScores[statThree]++;
+            abilityScores[statFour]++;
+            abilityScores[statFive]++;
+            abilityScores[statSix]++;
+            abilityScores[statSeven]++;
+            abilityScores[statEight]++;
         }
         else if(level > 18){
             int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
@@ -324,59 +221,59 @@ public class AirCharacter extends Character{
             int statNine = (int)(Math.random() * ((5-0)+1)) + 0;
             int statTen = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[statOne]++;
-            stats[statTwo]++;
-            stats[statThree]++;
-            stats[statFour]++;
-            stats[statFive]++;
-            stats[statSix]++;
-            stats[statSeven]++;
-            stats[statEight]++;
-            stats[statNine]++;
-            stats[statTen]++;
+            abilityScores[statOne]++;
+            abilityScores[statTwo]++;
+            abilityScores[statThree]++;
+            abilityScores[statFour]++;
+            abilityScores[statFive]++;
+            abilityScores[statSix]++;
+            abilityScores[statSeven]++;
+            abilityScores[statEight]++;
+            abilityScores[statNine]++;
+            abilityScores[statTen]++;
         }
 
         //airbenders have +2 dexterity and +2 wisdom
-        stats[1] += 2;
-        stats[4] += 2;
+        abilityScores[1] += 2;
+        abilityScores[4] += 2;
 
-        strength = stats[0];
-        dex = stats[1];
-        constitution = stats[2];
-        intelligence = stats[3];
-        wisdom = stats[4];
-        charisma = stats[5];
+        strength = abilityScores[0];
+        dex = abilityScores[1];
+        constitution = abilityScores[2];
+        intelligence = abilityScores[3];
+        wisdom = abilityScores[4];
+        charisma = abilityScores[5];
 
         //sets the modifiers based on each corresponding stat according to the rules
         for(int i = 0; i < 6; i++){
-            if(stats[i] == 1){
+            if(abilityScores[i] == 1){
                 modifiers[i] = -5;
             }
-            else if(stats[i] > 1 && stats[i] < 4){
+            else if(abilityScores[i] > 1 && abilityScores[i] < 4){
                 modifiers[i] = -4;
             }
-            else if(stats[i] > 3 && stats[i] < 6){
+            else if(abilityScores[i] > 3 && abilityScores[i] < 6){
                 modifiers[i] = -3;
             }
-            else if(stats[i] > 5 && stats[i] < 8){
+            else if(abilityScores[i] > 5 && abilityScores[i] < 8){
                 modifiers[i] = -2;
             }
-            else if(stats[i] > 7 && stats[i] < 10){
+            else if(abilityScores[i] > 7 && abilityScores[i] < 10){
                 modifiers[i] = -1;
             }
-            else if(stats[i] > 9 && stats[i] < 12){
+            else if(abilityScores[i] > 9 && abilityScores[i] < 12){
                 modifiers[i] = 0;
             }
-            else if(stats[i] > 11 && stats[i] < 14){
+            else if(abilityScores[i] > 11 && abilityScores[i] < 14){
                 modifiers[i] = 1;
             }
-            else if(stats[i] > 13 && stats[i] < 16){
+            else if(abilityScores[i] > 13 && abilityScores[i] < 16){
                 modifiers[i] = 2;
             }
-            else if(stats[i] > 15 && stats[i] < 18){
+            else if(abilityScores[i] > 15 && abilityScores[i] < 18){
                 modifiers[i] = 3;
             }
-            else if(stats[i] > 17 && stats[i] < 20){
+            else if(abilityScores[i] > 17 && abilityScores[i] < 20){
                 modifiers[i] = 4;
             }
             else{
@@ -384,12 +281,12 @@ public class AirCharacter extends Character{
             }
         }
 
-        smod = modifiers[0];
-        dmod = modifiers[1];
-        comod = modifiers[2];
-        imod = modifiers[3];
-        wmod = modifiers[4];
-        chmod = modifiers[5];
+        sMod = modifiers[0];
+        dMod = modifiers[1];
+        coMod = modifiers[2];
+        iMod = modifiers[3];
+        wMod = modifiers[4];
+        chMod = modifiers[5];
 
         //sets hit points to the minimum according to the rules
         if(level == 1){
@@ -401,7 +298,7 @@ public class AirCharacter extends Character{
             for(int i = 2; i < 21; i++){
                 int roll = (int)(Math.random()*((8-1)+1))+1;
                 maxHitPoints += roll;
-                maxHitPoints += comod;
+                maxHitPoints += coMod;
                 if(level == i){
                     break;
                 }
@@ -414,36 +311,36 @@ public class AirCharacter extends Character{
 
         System.out.println("Ability Scores and Modifiers");
         System.out.println("Strength: " + strength);
-        System.out.println("Strength modifier: " + smod);
+        System.out.println("Strength modifier: " + sMod);
         System.out.println("Dexterity: " + dex);
-        System.out.println("Dexterity modifier: " + dmod);
+        System.out.println("Dexterity modifier: " + dMod);
         System.out.println("Constitution: " + constitution);
-        System.out.println("Constitution modifier: " + comod);
+        System.out.println("Constitution modifier: " + coMod);
         System.out.println("Intelligence: " + intelligence);
-        System.out.println("Intelligence modifier: " + imod);
+        System.out.println("Intelligence modifier: " + iMod);
         System.out.println("Wisdom: " + wisdom);
-        System.out.println("Wisdom modifier: " + wmod);
+        System.out.println("Wisdom modifier: " + wMod);
         System.out.println("Charisma: " + charisma);
-        System.out.println("Charisma modifier: " + chmod + "\n");
+        System.out.println("Charisma modifier: " + chMod + "\n");
 
         //bending bonus depends on which style of bending is chosen
         if(style == 0){
-            System.out.println("Bending Bonus: " + dmod + "\n");
+            System.out.println("Bending Bonus: " + dMod + "\n");
         }else{
-            System.out.println("Bending Bonus: " + wmod + "\n");
+            System.out.println("Bending Bonus: " + wMod + "\n");
         }
 
         System.out.println("Proficiency Bonus: " + profBonus + "\n");
 
         System.out.println("Saving Throws");
-        System.out.println("Strength saving throw: " + smod);
+        System.out.println("Strength saving throw: " + sMod);
         //airbenders are proficient in dexterity saving throws
-        System.out.println("Dexterity saving throw: " + (dmod + profBonus));
-        System.out.println("Constitution saving throw: " + (comod));
-        System.out.println("Intelligence saving throw: " + imod);
+        System.out.println("Dexterity saving throw: " + (dMod + profBonus));
+        System.out.println("Constitution saving throw: " + (coMod));
+        System.out.println("Intelligence saving throw: " + iMod);
         //airbenders are proficient in wisdom saving throws
-        System.out.println("Wisdom saving throw: " + (wmod + profBonus));
-        System.out.println("Charisma saving throw: " + (chmod) + "\n");
+        System.out.println("Wisdom saving throw: " + (wMod + profBonus));
+        System.out.println("Charisma saving throw: " + (chMod) + "\n");
 
         //chooses 2 skills out of the possible 6 in which a airbender may be proficient as indicated by the rules
         int prof1 = (int)(Math.random()*((5-0)+1))+0;
@@ -455,49 +352,49 @@ public class AirCharacter extends Character{
         }while(prof2 == prof1);
 
         System.out.println("Skills");
-        System.out.println("Acrobatics: " + (dmod + profBonus));
+        System.out.println("Acrobatics: " + (dMod + profBonus));
         if(prof1 == 0 || prof2 == 0){
 
-            System.out.println("Animal Handling: " + (wmod + profBonus));
+            System.out.println("Animal Handling: " + (wMod + profBonus));
         }else{
-            System.out.println("Animal Handling: " + wmod);
+            System.out.println("Animal Handling: " + wMod);
         }
         if(prof1 == 1 || prof2 == 1){
-            System.out.println("Athletics: " + (smod + profBonus));
+            System.out.println("Athletics: " + (sMod + profBonus));
         }else{
-            System.out.println("Animal Handling: " + smod);
+            System.out.println("Animal Handling: " + sMod);
         }
-        System.out.println("Deception: " + chmod);
+        System.out.println("Deception: " + chMod);
         if(prof1 == 2 || prof2 == 2){
-            System.out.println("History: " + (imod + profBonus));
+            System.out.println("History: " + (iMod + profBonus));
         }else{
-            System.out.println("History: " + imod);
+            System.out.println("History: " + iMod);
         }
         if(prof1 == 3 || prof2 == 3){
-            System.out.println("Insight: " + (wmod + profBonus));
+            System.out.println("Insight: " + (wMod + profBonus));
         }else{
-            System.out.println("Insight: " + wmod);
+            System.out.println("Insight: " + wMod);
         }
-        System.out.println("Intimidation: " + chmod);
-        System.out.println("Investigation: " + imod);
-        System.out.println("Medicine: " + wmod);
-        System.out.println("Nature: " + imod);
+        System.out.println("Intimidation: " + chMod);
+        System.out.println("Investigation: " + iMod);
+        System.out.println("Medicine: " + wMod);
+        System.out.println("Nature: " + iMod);
         if(prof1 == 4 || prof2 == 4){
-            System.out.println("Perception: " + (wmod + profBonus));
+            System.out.println("Perception: " + (wMod + profBonus));
         }else{
-            System.out.println("Perception: " + wmod);
+            System.out.println("Perception: " + wMod);
         }
-        System.out.println("Performance: " + chmod);
-        System.out.println("Persuasion: " + chmod);
+        System.out.println("Performance: " + chMod);
+        System.out.println("Persuasion: " + chMod);
         if(prof1 == 5 || prof2 == 5){
-            System.out.println("Slight of Hand: " + (dmod + profBonus));
+            System.out.println("Slight of Hand: " + (dMod + profBonus));
         }else{
-            System.out.println("Slight of Hand: " + dmod);
+            System.out.println("Slight of Hand: " + dMod);
         }
-        System.out.println("Stealth: " + (dmod + profBonus));
-        System.out.println("Survival: " + wmod + "\n");
+        System.out.println("Stealth: " + (dMod + profBonus));
+        System.out.println("Survival: " + wMod + "\n");
 
-        System.out.println("Initiative: " + dmod + "\n");
+        System.out.println("Initiative: " + dMod + "\n");
 
         System.out.println("Speed: " + speed + "\n");
 

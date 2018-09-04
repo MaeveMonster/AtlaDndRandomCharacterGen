@@ -5,17 +5,17 @@ public class Character {
     int level;
     int maxBP; //maximum bending points for use in combat
     int strength;
-    int smod; //strength modifier
+    int sMod; //strength modifier
     int dex; //dexterity
-    int dmod; //dexterity modifier
+    int dMod; //dexterity modifier
     int constitution;
-    int comod; //constitution modifier
+    int coMod; //constitution modifier
     int intelligence;
-    int imod; //intelligence modifier
+    int iMod; //intelligence modifier
     int wisdom;
-    int wmod; //wisdom modifier
+    int wMod; //wisdom modifier
     int charisma;
-    int chmod; //charisma modifier
+    int chMod; //charisma modifier
     int maxHitPoints;
     int hitDice;
     int profBonus; //proficiency bonus depends on level
@@ -42,6 +42,9 @@ public class Character {
         maxHitPoints = 0;
         hitDice = 0;
         skillPoints = 2;
+
+        //generates a random style, either 0 or 1
+        style = (int)(Math.random()*((1-0)+1))+0;
     }
 
     public Character(int g, int l){
@@ -50,50 +53,11 @@ public class Character {
         gender = g;
         level = l;
 
-        //sets max bending points depending on the level of the character
-        if(level == 1){
-            maxBP = 8;
-        }
-        else if(level > 1 && level < 5){
-            maxBP = 9;
-        }
-        else if(level > 4 && level < 8){
-            maxBP = 10;
-        }
-        else if(level > 7 && level < 11){
-            maxBP = 11;
-        }
-        else if(level > 10 && level < 14){
-            maxBP = 12;
-        }
-        else if(level > 13 && level < 17){
-            maxBP = 13;
-        }
-        else if(level > 16 && level < 20){
-            maxBP = 14;
-        }
-        else{
-            maxBP = 15;
-        }
+        maxBP = genMaxBendingPoints(level);
 
-        //sets proficiency bonus depending on the level of the character
-        if(level < 5){
-            profBonus = 2;
-        }
-        else if(level > 4 && level < 9){
-            profBonus = 3;
-        }
-        else if(level > 8 && level < 13){
-            profBonus = 4;
-        }
-        else if(level > 12 && level < 17){
-            profBonus = 5;
-        }
-        else{
-            profBonus = 6;
-        }
+        profBonus = genProfBonus(level);
 
-        //sets all stats to zero so that random generation can occur in genRandomStats
+        //sets all ability scores to zero so that random generation can occur in genRandomStats
         strength = 0;
         dex = 0;
         constitution = 0;
@@ -103,63 +67,44 @@ public class Character {
         maxHitPoints = 0;
         hitDice = 0;
 
-        //sets skill points depending on character's level as detailed in the rules
-        if(level == 1){
-            skillPoints = 2;
-        }
-        else if(level == 2){
-            skillPoints = 3;
-        }
-        else if(level == 3 || level == 4){
-            skillPoints = 5;
-        }
-        else if(level == 5){
-            skillPoints = 6;
-        }
-        else if(level == 6){
-            skillPoints = 8;
-        }
-        else if(level == 7 || level == 8){
-            skillPoints = 10;
-        }
-        else if(level == 9){
-            skillPoints = 12;
-        }
-        else if(level == 10){
-            skillPoints = 14;
-        }
-        else if(level == 11 || level == 12){
-            skillPoints = 15;
-        }
-        else if(level == 13){
-            skillPoints = 17;
-        }
-        else if(level == 14){
-            skillPoints = 18;
-        }
-        else if(level == 15 || level == 16){
-            skillPoints = 20;
-        }
-        else if(level == 17){
-            skillPoints = 21;
-        }
-        else if(level == 18 || level == 19){
-            skillPoints = 23;
-        }
-        else{
-            skillPoints = 24;
-        }
+        skillPoints = genSkillPoints(level);
+
+        //generates a random style, either 0 or 1
+        style = (int)(Math.random()*((1-0)+1))+0;
 
     }
 
     //generates stats randomly as Dnd rules state. Simulates rolling dice at marked locations
     public void genRandomStats(){
 
-        int[] stats = new int[6];
-        int[] modifiers = new int[6];
+        int abilityScores[] = genRandomAbilityScores();
+        abilityScores = levelUpAbilityScores(abilityScores, level);
+        int[] modifiers = genAbilityModifiers(abilityScores);
+
+        strength = abilityScores[0];
+        dex = abilityScores[1];
+        constitution = abilityScores[2];
+        intelligence = abilityScores[3];
+        wisdom = abilityScores[4];
+        charisma = abilityScores[5];
+
+        sMod = modifiers[0];
+        dMod = modifiers[1];
+        coMod = modifiers[2];
+        iMod = modifiers[3];
+        wMod = modifiers[4];
+        chMod = modifiers[5];
+
+        maxHitPoints = genMaxHitPoints(level, coMod);
+
+    }
+
+    public int[] genRandomAbilityScores(){
+
+        int[] abilityScores = new int[6];
         int[] rolls = new int[4];
 
-        //for each of the 6 stats: strength, dexterity, constitution, intelligence, wisdom, charisma
+        //for each of the 6 ability scores: strength, dexterity, constitution, intelligence, wisdom, charisma
         for(int i = 0; i < 6; i++){
 
             //simulates rolling 4 d6 dice
@@ -188,33 +133,38 @@ public class Character {
                 }
             }
 
-            //assigns the sum of the largest 3 rolls to one of the six stats
-            stats[i] = sum;
+            //assigns the sum of the largest 3 rolls to one of the six ability scores
+            abilityScores[i] = sum;
 
         }
 
+        return abilityScores;
+
+    }
+
+    public int[] levelUpAbilityScores(int[] abilityScores, int lev){
         //as a player levels up, occasionally they receive the opportunity to do one of the following:
-        //increase one stat by 2
-        //increase two stats by 1
-        if(level > 3 && level < 8){
+        //increase one ability score by 2
+        //increase two ability scores by 1
+        if(lev > 3 && lev < 8){
             int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
             int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[statOne]++;
-            stats[statTwo]++;
+            abilityScores[statOne]++;
+            abilityScores[statTwo]++;
         }
-        else if(level > 7 && level < 12){
+        else if(lev > 7 && lev < 12){
             int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
             int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
             int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
             int statFour = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[statOne]++;
-            stats[statTwo]++;
-            stats[statThree]++;
-            stats[statFour]++;
+            abilityScores[statOne]++;
+            abilityScores[statTwo]++;
+            abilityScores[statThree]++;
+            abilityScores[statFour]++;
         }
-        else if(level > 11 && level < 16){
+        else if(lev > 11 && lev < 16){
             int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
             int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
             int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
@@ -222,14 +172,14 @@ public class Character {
             int statFive = (int)(Math.random() * ((5-0)+1)) + 0;
             int statSix = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[statOne]++;
-            stats[statTwo]++;
-            stats[statThree]++;
-            stats[statFour]++;
-            stats[statFive]++;
-            stats[statSix]++;
+            abilityScores[statOne]++;
+            abilityScores[statTwo]++;
+            abilityScores[statThree]++;
+            abilityScores[statFour]++;
+            abilityScores[statFive]++;
+            abilityScores[statSix]++;
         }
-        else if(level > 15 && level < 19){
+        else if(lev > 15 && lev < 19){
             int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
             int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
             int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
@@ -239,16 +189,16 @@ public class Character {
             int statSeven = (int)(Math.random() * ((5-0)+1)) + 0;
             int statEight = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[statOne]++;
-            stats[statTwo]++;
-            stats[statThree]++;
-            stats[statFour]++;
-            stats[statFive]++;
-            stats[statSix]++;
-            stats[statSeven]++;
-            stats[statEight]++;
+            abilityScores[statOne]++;
+            abilityScores[statTwo]++;
+            abilityScores[statThree]++;
+            abilityScores[statFour]++;
+            abilityScores[statFive]++;
+            abilityScores[statSix]++;
+            abilityScores[statSeven]++;
+            abilityScores[statEight]++;
         }
-        else if(level > 18){
+        else if(lev > 18){
             int statOne = (int)(Math.random() * ((5-0)+1)) + 0;
             int statTwo = (int)(Math.random() * ((5-0)+1)) + 0;
             int statThree = (int)(Math.random() * ((5-0)+1)) + 0;
@@ -260,140 +210,350 @@ public class Character {
             int statNine = (int)(Math.random() * ((5-0)+1)) + 0;
             int statTen = (int)(Math.random() * ((5-0)+1)) + 0;
 
-            stats[statOne]++;
-            stats[statTwo]++;
-            stats[statThree]++;
-            stats[statFour]++;
-            stats[statFive]++;
-            stats[statSix]++;
-            stats[statSeven]++;
-            stats[statEight]++;
-            stats[statNine]++;
-            stats[statTen]++;
+            abilityScores[statOne]++;
+            abilityScores[statTwo]++;
+            abilityScores[statThree]++;
+            abilityScores[statFour]++;
+            abilityScores[statFive]++;
+            abilityScores[statSix]++;
+            abilityScores[statSeven]++;
+            abilityScores[statEight]++;
+            abilityScores[statNine]++;
+            abilityScores[statTen]++;
         }
 
-        strength = stats[0];
-        dex = stats[1];
-        constitution = stats[2];
-        intelligence = stats[3];
-        wisdom = stats[4];
-        charisma = stats[5];
+        return abilityScores;
+    }
+
+    public int[] genAbilityModifiers(int[] abilityScores){
+
+        int[] modis = new int[6];
 
         //sets modifiers to values indicated by the rules, based on the value of the corresponding stat
         //during gameplay modifiers are applied to rolls as indicated by the rules or at the DM's discretion
         for(int i = 0; i < 6; i++){
-            if(stats[i] == 1){
-                modifiers[i] = -5;
+            if(abilityScores[i] == 1){
+                modis[i] = -5;
             }
-            else if(stats[i] > 1 && stats[i] < 4){
-                modifiers[i] = -4;
+            else if(abilityScores[i] > 1 && abilityScores[i] < 4){
+                modis[i] = -4;
             }
-            else if(stats[i] > 3 && stats[i] < 6){
-                modifiers[i] = -3;
+            else if(abilityScores[i] > 3 && abilityScores[i] < 6){
+                modis[i] = -3;
             }
-            else if(stats[i] > 5 && stats[i] < 8){
-                modifiers[i] = -2;
+            else if(abilityScores[i] > 5 && abilityScores[i] < 8){
+                modis[i] = -2;
             }
-            else if(stats[i] > 7 && stats[i] < 10){
-                modifiers[i] = -1;
+            else if(abilityScores[i] > 7 && abilityScores[i] < 10){
+                modis[i] = -1;
             }
-            else if(stats[i] > 9 && stats[i] < 12){
-                modifiers[i] = 0;
+            else if(abilityScores[i] > 9 && abilityScores[i] < 12){
+                modis[i] = 0;
             }
-            else if(stats[i] > 11 && stats[i] < 14){
-                modifiers[i] = 1;
+            else if(abilityScores[i] > 11 && abilityScores[i] < 14){
+                modis[i] = 1;
             }
-            else if(stats[i] > 13 && stats[i] < 16){
-                modifiers[i] = 2;
+            else if(abilityScores[i] > 13 && abilityScores[i] < 16){
+                modis[i] = 2;
             }
-            else if(stats[i] > 15 && stats[i] < 18){
-                modifiers[i] = 3;
+            else if(abilityScores[i] > 15 && abilityScores[i] < 18){
+                modis[i] = 3;
             }
-            else if(stats[i] > 17 && stats[i] < 20){
-                modifiers[i] = 4;
+            else if(abilityScores[i] > 17 && abilityScores[i] < 20){
+                modis[i] = 4;
             }
             else{
-                modifiers[i] = 5;
+                modis[i] = 5;
             }
         }
 
-        smod = modifiers[0];
-        dmod = modifiers[1];
-        comod = modifiers[2];
-        imod = modifiers[3];
-        wmod = modifiers[4];
-        chmod = modifiers[5];
+        return modis;
+
+    }
+
+    public int genMaxHitPoints(int lev, int constitutionModifier){
+
+        int maxHP;
 
         //sets hit points to the minimum as indicated by the rules
-        if(level == 1){
-            maxHitPoints = 8;
+        if(lev == 1){
+            maxHP = 8;
         }
         //each time a player levels up, they roll a d8, add their constitution modifier to the roll, and then add that number to their max hit points
         else{
-            maxHitPoints = 8;
+            maxHP = 8;
             for(int i = 2; i < 21; i++){
                 int roll = (int)(Math.random()*((8-1)+1))+1;
-                maxHitPoints += roll;
-                maxHitPoints += comod;
-                if(level == i){
+                maxHP += roll;
+                maxHP += constitutionModifier;
+                if(lev == i){
                     break;
                 }
             }
         }
 
+        return maxHP;
+
+    }
+
+    public void printStats(){
+
         //prints information for the user
+
+        System.out.println("Name: " + name);
+        System.out.println("Level: " + level + "\n");
+
         System.out.println("Ability Scores and Modifiers");
         System.out.println("Strength: " + strength);
-        System.out.println("Strength modifier: " + smod);
+        System.out.println("Strength modifier: " + sMod);
         System.out.println("Dexterity: " + dex);
-        System.out.println("Dexterity modifier: " + dmod);
+        System.out.println("Dexterity modifier: " + dMod);
         System.out.println("Constitution: " + constitution);
-        System.out.println("Constitution modifier: " + comod);
+        System.out.println("Constitution modifier: " + coMod);
         System.out.println("Intelligence: " + intelligence);
-        System.out.println("Intelligence modifier: " + imod);
+        System.out.println("Intelligence modifier: " + iMod);
         System.out.println("Wisdom: " + wisdom);
-        System.out.println("Wisdom modifier: " + wmod);
+        System.out.println("Wisdom modifier: " + wMod);
         System.out.println("Charisma: " + charisma);
-        System.out.println("Charisma modifier: " + chmod + "\n");
-
-        System.out.println("Bending Bonus: depends on element\n");
+        System.out.println("Charisma modifier: " + chMod + "\n");
 
         System.out.println("Proficiency Bonus: " + profBonus + "\n");
 
-        System.out.println("Saving Throws");
-        System.out.println("Strength saving throw: " + smod);
-        System.out.println("Dexterity saving throw: " + dmod);
-        System.out.println("Constitution saving throw: " + comod);
-        System.out.println("Intelligence saving throw: " + imod);
-        System.out.println("Wisdom saving throw: " + wmod);
-        System.out.println("Charisma saving throw: " + chmod + "\n");
+        System.out.println("Initiative: " + dMod + "\n");
 
-        System.out.println("Skills");
-        System.out.println("Acrobatics: " + dmod);
-        System.out.println("Animal Handling: " + wmod);
-        System.out.println("Athletics: " + smod);
-        System.out.println("Deception: " + chmod);
-        System.out.println("History: " + imod);
-        System.out.println("Insight: " + wmod);
-        System.out.println("Intimidation: " + chmod);
-        System.out.println("Investigation: " + imod);
-        System.out.println("Medicine: " + wmod);
-        System.out.println("Nature: " + imod);
-        System.out.println("Perception: " + wmod);
-        System.out.println("Performance: " + chmod);
-        System.out.println("Persuasion: " + chmod);
-        System.out.println("Slight of Hand: " + dmod);
-        System.out.println("Stealth: " + dmod);
-        System.out.println("Survival: " + wmod + "\n");
-
-        System.out.println("Initiative: " + dmod + "\n");
-
-        System.out.println("Speed: depends on element\n");
+        System.out.println("Speed: " + speed + "\n");
 
         System.out.println("Max Hit Points: " + maxHitPoints);
-        System.out.println("Hit Dice: " + level);
+        System.out.println("Hit Dice (d8): " + level + "\n");
 
+        //prints the skills learned from both skill trees and at what level each skill is
+        System.out.println("Bending skills known:\n");
+        tree1.print();
+        System.out.println();
+        tree2.print();
 
+    }
+
+    public int genMaxBendingPoints(int lev){
+
+        int maxBendingPoints;
+
+        //sets max bending points depending on the level of the character
+        if(lev == 1){
+            maxBendingPoints = 8;
+        }
+        else if(lev > 1 && level < 5){
+            maxBendingPoints = 9;
+        }
+        else if(lev > 4 && level < 8){
+            maxBendingPoints = 10;
+        }
+        else if(lev > 7 && level < 11){
+            maxBendingPoints = 11;
+        }
+        else if(lev > 10 && level < 14){
+            maxBendingPoints = 12;
+        }
+        else if(lev > 13 && level < 17){
+            maxBendingPoints = 13;
+        }
+        else if(lev > 16 && level < 20){
+            maxBendingPoints = 14;
+        }
+        else{
+            maxBendingPoints = 15;
+        }
+
+        return maxBendingPoints;
+
+    }
+
+    public int genProfBonus(int lev){
+
+        int pb;
+
+        //sets proficiency bonus depending on the level of the character
+        if(lev < 5){
+            pb = 2;
+        }
+        else if(lev > 4 && lev < 9){
+            pb = 3;
+        }
+        else if(lev > 8 && lev < 13){
+            pb = 4;
+        }
+        else if(lev > 12 && lev < 17){
+            pb = 5;
+        }
+        else{
+            pb = 6;
+        }
+
+        return pb;
+
+    }
+
+    public int genSkillPoints(int lev){
+
+        int sp;
+
+        //sets skill points depending on character's level as detailed in the rules
+        if(level == 1){
+            sp = 2;
+        }
+        else if(level == 2){
+            sp = 3;
+        }
+        else if(level == 3 || level == 4){
+            sp = 5;
+        }
+        else if(level == 5){
+            sp = 6;
+        }
+        else if(level == 6){
+            sp = 8;
+        }
+        else if(level == 7 || level == 8){
+            sp = 10;
+        }
+        else if(level == 9){
+            sp = 12;
+        }
+        else if(level == 10){
+            sp = 14;
+        }
+        else if(level == 11 || level == 12){
+            sp = 15;
+        }
+        else if(level == 13){
+            sp = 17;
+        }
+        else if(level == 14){
+            sp = 18;
+        }
+        else if(level == 15 || level == 16){
+            sp = 20;
+        }
+        else if(level == 17){
+            sp = 21;
+        }
+        else if(level == 18 || level == 19){
+            sp = 23;
+        }
+        else{
+            sp = 24;
+        }
+
+        return sp;
+
+    }
+
+    public void fillSkillTrees(int tree1Size, int tree2Size){
+
+        //indicates how many skill points have been used to learn skills in the skill trees
+        int spUsed = 0;
+
+        //while skill points used is less than the number of skill points a character has to spend
+        while(spUsed < skillPoints){
+            //if no skill points have yet been used, pick one of the nodes at the top of the tree
+            if(spUsed == 0){
+                //first skill learned must be from the tree that corresponds to the character's bending style
+                //if style is 0 pick tree1
+                if(style == 0){
+                    //pick a random node on tree1
+                    int randNode = (int)(Math.random()*(((tree1Size-1)-0)+1))+0;
+                    //represents the amount of sp used before the loop
+                    int spUsedBeforeLoop = spUsed;
+                    //do until a skill point is used
+                    do{
+                        //the randomly chosen node
+                        Node node = tree1.nodes[randNode];
+                        //if the randomly chosen node has no parents
+                        //add a skill point to that node and add one to spUsed
+                        if(node.parent1 == null && node.parent2 == null){
+                            tree1.nodes[randNode].addSkillPoint();
+                            spUsed++;
+                        }
+                        //if the node has at least one parent
+                        //pick a new random node
+                        else{
+                            randNode = (int)(Math.random()*(((tree1Size-1)-0)+1))+0;
+                        }
+                    }while(spUsedBeforeLoop == spUsed);
+                }
+                //if style is 1 pick tree2
+                else {
+                    //pick a random node on tree2
+                    int randNode = (int)(Math.random()*(((tree2Size-1)-0)+1))+0;
+                    //represents the amount of sp used before the loop
+                    int spUsedBeforeLoop = spUsed;
+                    //do until a skill point is used
+                    do{
+                        //the randomly chosen node
+                        Node node = tree2.nodes[randNode];
+                        //if the randomly chosen node has no parents
+                        //add a skill point to that node and add one to spUsed
+                        if(node.parent1 == null && node.parent2 == null){
+                            tree2.nodes[randNode].addSkillPoint();
+                            spUsed++;
+                        }
+                        //if the node has at least one parent
+                        //pick a new random node
+                        else{
+                            randNode = (int)(Math.random()*(((tree2Size-1)-0)+1))+0;
+                        }
+                    }while(spUsedBeforeLoop == spUsed);
+                }
+            }
+            //if this is not the first skill point spent
+            else{
+                //pick a random tree
+                int tree = (int)(Math.random()*((1-0)+1))+0;
+                //if the first tree is chosen
+                if(tree == 0){
+                    //generate a random node on the tree
+                    int randNode = (int)(Math.random()*(((tree1Size-1)-0)+1))+0;
+                    //represents how many skill points have been used before entering this loop
+                    int spUsedBeforeLoop = spUsed;
+                    //do until a skill point is spent
+                    do{
+                        //if the chosen node is not full (some skills can be leveled up by using more skill points on them)
+                        //and if that skill's parent has been learned
+                        //add a skill point to that node and add one to spUsed
+                        if(tree1.nodes[randNode].parentIsUsed() && !tree1.nodes[randNode].isFull()){
+                            tree1.nodes[randNode].addSkillPoint();
+                            spUsed++;
+                        }
+                        //else generate a new random node
+                        else{
+                            randNode = (int)(Math.random()*(((tree1Size-1)-0)+1))+0;
+                        }
+                    }while(spUsedBeforeLoop == spUsed);
+                }
+                //if the second tree is chosen
+                else{
+                    //generate a random node on the tree
+                    int randNode = (int)(Math.random()*(((tree2Size-1)-0)+1))+0;
+                    //represents how many skill points have been used before entering this loop
+                    int spUsedBeforeLoop = spUsed;
+                    //do until a skill point is spent
+                    do{
+                        //if the chosen node is not full (some skills can be leveled up by using more skill points on them)
+                        //and if that skill's parent has been learned
+                        //add a skill point to that node and add one to spUsed
+                        if(tree2.nodes[randNode].parentIsUsed() && !tree2.nodes[randNode].isFull()){
+                            tree2.nodes[randNode].addSkillPoint();
+                            spUsed++;
+                        }
+                        //else generate a new random node
+                        else{
+                            randNode = (int)(Math.random()*(((tree2Size-1)-0)+1))+0;
+                        }
+                    }while(spUsedBeforeLoop == spUsed);
+                }
+            }
+
+        }
 
     }
 }

@@ -4,7 +4,11 @@ public class Main {
 
     public static void main(String[] args){
 
-        Scanner scanner = new Scanner(System.in);
+        WaterCharacter water = new WaterCharacter(0, 10);
+        water.genRandomStats();
+        water.printStats();
+
+        /*Scanner scanner = new Scanner(System.in);
         int element;
         int level;
         int gender;
@@ -66,12 +70,14 @@ public class Main {
 
         //creates a random character based on user input and calls genRandomStats
         if(element == 0){
-            AirCharacter air = new AirCharacter(level);
+            AirCharacter air = new AirCharacter(gender, level);
             air.genRandomStats();
+            air.printStats();
         }
         else if(element == 1){
             WaterCharacter water = new WaterCharacter(gender, level);
             water.genRandomStats();
+            water.printStats();
         }
         else if(element == 2){
             EarthCharacter earth = new EarthCharacter(gender, level);
@@ -80,7 +86,7 @@ public class Main {
         else{
             FireCharacter fire = new FireCharacter(gender, level);
             fire.genRandomStats();
-        }
+        }*/
 
 
 

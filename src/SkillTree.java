@@ -31,4 +31,23 @@ public class SkillTree {
 
     }
 
+    public void print(){
+
+        System.out.println(name + ":");
+        for(int i = 0; i < length; i++){
+            if(nodes[i].used[0] == true){
+                System.out.print(nodes[i].name);
+                System.out.print(" ");
+                String string = "";
+                for(int j = 0; j < nodes[i].length; j++){
+                    if(nodes[i].used[j] == true){
+                        string += "I";
+                    }
+                }
+                System.out.println(string);
+            }
+        }
+
+    }
+
 }
