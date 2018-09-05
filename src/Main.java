@@ -8,6 +8,18 @@ public class Main {
         water.genRandomStats();
         water.printStats();
 
+        AirCharacter air = new AirCharacter(0, 10);
+        air.genRandomStats();
+        air.printStats();
+
+        EarthCharacter earth = new EarthCharacter(0, 10);
+        earth.genRandomStats();
+        earth.printStats();
+
+        FireCharacter fire = new FireCharacter(0, 10);
+        fire.genRandomStats();
+        fire.printStats();
+
         /*Scanner scanner = new Scanner(System.in);
         int element;
         int level;
@@ -82,10 +94,12 @@ public class Main {
         else if(element == 2){
             EarthCharacter earth = new EarthCharacter(gender, level);
             earth.genRandomStats();
+            earth.printStats();
         }
         else{
             FireCharacter fire = new FireCharacter(gender, level);
             fire.genRandomStats();
+            fire.printStats();
         }*/
 
 

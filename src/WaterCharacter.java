@@ -126,6 +126,7 @@ public class WaterCharacter extends Character{
 
         }while(prof2 == prof1);
 
+        String profSkills = "Skills: ";
         System.out.println("Skills");
         System.out.println("Acrobatics: " + dMod);
         System.out.println("Animal Handling: " + wMod);
@@ -133,23 +134,27 @@ public class WaterCharacter extends Character{
         if(prof1 == 0 || prof2 == 0){
 
             System.out.println("Deception: " + (chMod + profBonus));
+            profSkills += "Deception ";
         }else{
             System.out.println("Deception: " + chMod);
         }
         System.out.println("History: " + iMod);
         if(prof1 == 1 || prof2 == 1){
             System.out.println("Insight: " + (wMod + profBonus));
+            profSkills += "Insight ";
         }else{
             System.out.println("Insight: " + wMod);
         }
         System.out.println("Intimidation: " + chMod);
         if(prof1 == 2 || prof2 == 2){
             System.out.println("Investigation: " + (iMod + profBonus));
+            profSkills += "Investigation ";
         }else{
             System.out.println("Investigation: " + iMod);
         }
         if(prof1 == 3 || prof2 == 3){
             System.out.println("Medicine: " + (wMod + profBonus));
+            profSkills += "Medicine ";
         }else{
             System.out.println("Medicine: " + wMod);
         }
@@ -157,17 +162,21 @@ public class WaterCharacter extends Character{
         System.out.println("Perception: " + wMod);
         if(prof1 == 4 || prof2 == 4){
             System.out.println("Performance: " + (chMod + profBonus));
+            profSkills += "Performance ";
         }else{
             System.out.println("Performance: " + chMod);
         }
         if(prof1 == 5 || prof2 == 5){
             System.out.println("Persuasion: " + (chMod + profBonus));
+            profSkills += "Persuasion ";
         }else{
             System.out.println("Persuasion: " + chMod);
         }
         System.out.println("Slight of Hand: " + dMod);
         System.out.println("Stealth: " + dMod);
         System.out.println("Survival: " + wMod + "\n");
+
+        profSkills += "(both already included in above calculations)\n";
 
         System.out.println("Because you are a Waterbender...");
         System.out.println("Intelligence +1 (already included in above calculations)");
@@ -178,26 +187,6 @@ public class WaterCharacter extends Character{
         System.out.println("Proficiencies");
         System.out.println("Armor: Light armor");
         System.out.println("Saving Throws: Constitution Charisma (both already included in above calculations)");
-        String profSkills = "Skills: ";
-        if(prof1 == 0 || prof2 == 0){
-            profSkills += "Deception ";
-        }
-        if(prof1 == 1 || prof2 == 1){
-            profSkills += "Insight ";
-        }
-        if(prof1 == 2 || prof2 == 2){
-            profSkills += "Investigation ";
-        }
-        if(prof1 == 3 || prof2 == 3){
-            profSkills += "Medicine ";
-        }
-        if(prof1 == 4 || prof2 == 4){
-            profSkills += "Performance ";
-        }
-        if(prof1 == 5 || prof2 == 5){
-            profSkills += "Persuasion ";
-        }
-        profSkills += "(both already included in above calculations)\n";
         System.out.println(profSkills);
 
     }
