@@ -3,7 +3,7 @@ This java console application helps the user to create a character to use in Ava
 
 Known Bugs:
 
-The user frequently has to enter their input several times before anything happens.
+(FIXED 9/5) The user frequently has to enter their input several times before anything happens.
 
 The once the user has entered all of their input, the program occasionally times out while creating the character and needs to be restarted.
 
