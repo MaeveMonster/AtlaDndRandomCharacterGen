@@ -25,8 +25,8 @@ public class AirCharacter extends Character{
         name += " of the Air Nomads";
 
         //airbending styles are Defensive Airbending and Offensive Airbending
-        tree1 = new SkillTree("Defensive", 7);
-        tree2 = new SkillTree("Offensive", 8);
+        tree1 = new SkillTree("Defensive Airbending", 7);
+        tree2 = new SkillTree("Offensive Airbending", 8);
 
         //creates nodes of the skill trees in a precise order so that parent-child relationships are correct
         tree1.addNode(new Node("Air Block", 1, null, null, false));
@@ -84,8 +84,10 @@ public class AirCharacter extends Character{
         //bending bonus depends on which style of bending is chosen
         if(style == 0){
             System.out.println("Bending Bonus: " + dMod + "\n");
+            System.out.println("Bending saving DC: " + (8 + profBonus + dMod) + "\n");
         }else{
             System.out.println("Bending Bonus: " + wMod + "\n");
+            System.out.println("Bending saving DC: " + (8 + profBonus + wMod) + "\n");
         }
 
         System.out.println("Proficiency Bonus: " + profBonus + "\n");
@@ -123,7 +125,7 @@ public class AirCharacter extends Character{
             System.out.println("Athletics: " + (sMod + profBonus));
             profSkills += "Athletics ";
         }else{
-            System.out.println("Animal Handling: " + sMod);
+            System.out.println("Athletics: " + sMod);
         }
         System.out.println("Deception: " + chMod);
         if(prof1 == 2 || prof2 == 2){

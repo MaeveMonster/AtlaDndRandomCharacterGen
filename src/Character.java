@@ -326,11 +326,20 @@ public class Character {
         System.out.println("Max Hit Points: " + maxHitPoints);
         System.out.println("Hit Dice (d8): " + level + "\n");
 
+
+
         //prints the skills learned from both skill trees and at what level each skill is
+        if(style == 0){
+            System.out.println("Bending style (skills from this tree cost fewer bending points to perform in battle): " + tree1.name);
+        }
+        else{
+            System.out.println("Bending style (skills from this tree cost fewer bending points to perform in battle): " + tree2.name);
+        }
         System.out.println("Bending skills known:\n");
         tree1.print();
         System.out.println();
         tree2.print();
+        System.out.println();
 
     }
 

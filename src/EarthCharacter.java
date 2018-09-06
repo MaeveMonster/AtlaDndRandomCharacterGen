@@ -42,8 +42,8 @@ public class EarthCharacter extends Character{
         name += " of the Earth Kingdom";
 
         //earthbending styles are Powerful Earthbending and Subtle Earthbending
-        tree1 = new SkillTree("Powerful", 7);
-        tree2 = new SkillTree("Subtle", 8);
+        tree1 = new SkillTree("Powerful Earthbending", 7);
+        tree2 = new SkillTree("Subtle Earthbending", 8);
 
         //creates nodes of the skill trees in a precise order so that parent-child relationships are correct
         tree1.addNode(new Node("Launch Boulder", 3, null, null, false));
@@ -101,8 +101,10 @@ public class EarthCharacter extends Character{
         //bending bonus depends on which style of bending is chosen
         if(style == 0){
             System.out.println("Bending Bonus: " + sMod + "\n");
+            System.out.println("Bending saving DC: " + (8 + profBonus + sMod) + "\n");
         }else{
             System.out.println("Bending Bonus: " + wMod + "\n");
+            System.out.println("Bending saving DC: " + (8 + profBonus + wMod) + "\n");
         }
 
         System.out.println("Proficiency Bonus: " + profBonus + "\n");

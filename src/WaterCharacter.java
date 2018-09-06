@@ -103,8 +103,10 @@ public class WaterCharacter extends Character{
         //bending bonus depends on which style of bending is chosen
         if(style == 0){
             System.out.println("Bending Bonus: " + chMod + "\n");
+            System.out.println("Bending saving DC: " + (8 + profBonus + chMod) + "\n");
         }else{
             System.out.println("Bending Bonus: " + wMod + "\n");
+            System.out.println("Bending saving DC: " + (8 + profBonus + wMod) + "\n");
         }
 
         System.out.println("Saving Throws");

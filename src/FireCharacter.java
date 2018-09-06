@@ -100,8 +100,10 @@ public class FireCharacter extends Character{
         //bending bonus depends on which style of bending is chosen
         if(style == 0){
             System.out.println("Bending Bonus: " + sMod + "\n");
+            System.out.println("Bending saving DC: " + (8 + profBonus + sMod) + "\n");
         }else{
             System.out.println("Bending Bonus: " + wMod + "\n");
+            System.out.println("Bending saving DC: " + (8 + profBonus + wMod) + "\n");
         }
 
         System.out.println("Saving Throws");
@@ -134,9 +136,7 @@ public class FireCharacter extends Character{
         }
         System.out.println("Animal Handling: " + wMod);
         if(prof1 == 1 || prof2 == 1){
-
             System.out.println("Athletics: " + (sMod + profBonus));
-            profSkills += "Athletics ";
             profSkills += "Athletics ";
         }else{
             System.out.println("Athletics: " + sMod);

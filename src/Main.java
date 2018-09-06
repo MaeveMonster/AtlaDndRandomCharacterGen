@@ -4,23 +4,7 @@ public class Main {
 
     public static void main(String[] args){
 
-        WaterCharacter water = new WaterCharacter(0, 10);
-        water.genRandomStats();
-        water.printStats();
-
-        AirCharacter air = new AirCharacter(0, 10);
-        air.genRandomStats();
-        air.printStats();
-
-        EarthCharacter earth = new EarthCharacter(0, 10);
-        earth.genRandomStats();
-        earth.printStats();
-
-        FireCharacter fire = new FireCharacter(0, 10);
-        fire.genRandomStats();
-        fire.printStats();
-
-        /*Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         int element;
         int level;
         int gender;
@@ -28,57 +12,59 @@ public class Main {
         System.out.println("Welcome to Avater the Last Airbender Dnd Random Character Generator!\n" +
                             "Please Have a character sheet ready to write down your stats, and a rule sheet " +
                             "handy to understand them!");
-        System.out.print("Please enter the element of your character!\n" +
+        System.out.println("Please enter the element of your character!\n" +
                          "Enter 0 for Airbender\n" +
                          "Enter 1 for Waterbender\n" +
                          "Enter 2 for Earthbender\n" +
-                         "Enter 3 for Firebender\n" +
-                         "Element: ");
+                         "Enter 3 for Firebender");
         //error checks user input
-        while(!scanner.hasNextInt() || (scanner.nextInt() < 0 || scanner.nextInt() > 3)){
-            if(!scanner.hasNextInt()){
-                System.out.print("\nThat's not an integer. Try again: ");
-                scanner.next();
-            }
-            else if(scanner.nextInt() < 0 || scanner.nextInt() > 3){
-                System.out.print("\nThat number is outside of the accepted range. Try again: ");
-                scanner.next();
-            }
-        }
-        element = scanner.nextInt();
-
-        System.out.print("\nGreat! Now enter the level of your character! It must be between 1 and 20, inclusive.\n" +
-                         "Level: ");
-        //error checks user input
-        while(!scanner.hasNextInt() || (scanner.nextInt() < 1 || scanner.nextInt() > 20)){
-            if(!scanner.hasNextInt()){
-                System.out.print("\nThat's not an integer. Try again: ");
-                scanner.next();
+        element = -1;
+        do{
+            System.out.print("Make sure your input is within the accepted range of integers.\nElement:  ");
+            if(scanner.hasNextInt()){
+                element = scanner.nextInt();
             }
             else{
-                System.out.print("\nThat number is outside of the accepted range. Try again: ");
+                System.out.println("That's not an integer. Try again.");
                 scanner.next();
             }
-        }
-        level = scanner.nextInt();
+
+        }while(element < 0 || element > 3);
+
+        System.out.println("\nGreat! Now enter the level of your character! It must be between 1 and 20, inclusive.");
+        //error checks user input
+        level = -1;
+        do{
+            System.out.print("Make sure your input is within the accepted range of integers.\nLevel:  ");
+            if(scanner.hasNextInt()){
+                level = scanner.nextInt();
+            }
+            else{
+                System.out.println("That's not an integer. Try again.");
+                scanner.next();
+            }
+
+        }while(level < 0 || level > 20);
 
         System.out.print("\nGreat! Now enter the gender of your character.\n" +
                          "Enter 0 for male.\n" +
                          "Enter 1 for female.\n" +
-                         "Enter 2 for both/neither.\n" +
-                         "Gender: ");
+                         "Enter 2 for both/neither.\n");
         //error checks user input
-        while(!scanner.hasNextInt() || (scanner.nextInt() < 0 || scanner.nextInt() > 2)){
-            if(!scanner.hasNextInt()){
-                System.out.print("\nThat's not an integer. Try again: ");
-                scanner.next();
+        gender = -1;
+        do{
+            System.out.print("Make sure your input is within the accepted range of integers.\nGender:  ");
+            if(scanner.hasNextInt()){
+                gender = scanner.nextInt();
             }
             else{
-                System.out.print("\nThat number is outside of the accepted range. Try again: ");
+                System.out.print("That's not an integer. Try again. ");
                 scanner.next();
             }
-        }
-        gender = scanner.nextInt();
+
+        }while(gender < 0 || gender > 2);
+
+        System.out.println("\n\n");
 
         //creates a random character based on user input and calls genRandomStats
         if(element == 0){
@@ -100,7 +86,7 @@ public class Main {
             FireCharacter fire = new FireCharacter(gender, level);
             fire.genRandomStats();
             fire.printStats();
-        }*/
+        }
 
 
 
